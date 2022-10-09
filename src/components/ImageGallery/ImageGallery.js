@@ -1,11 +1,11 @@
 import Button from "components/Button";
 import ImageGalleryItem from "components/ImageGalleryItem";
+import PropTypes from 'prop-types';
 import { Component } from 'react';
 import { toast } from 'react-toastify';
 import * as API from '../../services/api';
-import { Gallery } from './ImageGallery.styled';
 import Loader from '../Loader';
-import PropTypes from 'prop-types';
+import { Gallery } from './ImageGallery.styled';
 
 class ImageGallery extends Component {
 	state = {
@@ -32,23 +32,22 @@ class ImageGallery extends Component {
 			autoClose: 3000,
 		};
 
-		if (nextPage !== currentPage) {
-			this.setState({ page: this.props.page });
-		}
+		// if (nextPage !== currentPage) {
+		// 	this.setState({ page: this.props.page });
+		// }
 
 		if (prevQuery !== nextQuery) {
 			this.setState({ items: [], page: 1 });
 		}
 
-
 		if (
 			prevPage !== currentPage ||
 			prevQuery !== nextQuery
-			) {
+		) {
 			this.setState({ isLoad: true });
 			try {
 
-			
+
 				const images = await API.getData(nextQuery, page);
 				this.setState(state =>
 					state.items
@@ -87,7 +86,7 @@ class ImageGallery extends Component {
 
 	onClick = () => {
 		this.setState(state => ({ page: state.page + 1 }));
-		
+
 	};
 
 
