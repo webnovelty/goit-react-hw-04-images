@@ -25,7 +25,7 @@ class ImageGallery extends Component {
 		const nextQuery = this.props.name;
 		const prevPage = prevState.page;
 		const currentPage = this.state.page;
-		const nextPage = this.props.page;
+		// const nextPage = this.props.page;
 
 		const options = {
 			position: 'top-right',
