@@ -32,17 +32,23 @@ class ImageGallery extends Component {
 			autoClose: 3000,
 		};
 
-		if (prevQuery !== nextQuery) {
-			this.setState({ items: [], page: 1 });
-		}
-
 		if (nextPage !== currentPage) {
 			this.setState({ page: this.props.page });
 		}
 
-		if (prevPage !== currentPage || prevQuery !== nextQuery) {
+		if (prevQuery !== nextQuery) {
+			this.setState({ items: [], page: 1 });
+		}
+
+
+		if (
+			prevPage !== currentPage ||
+			prevQuery !== nextQuery
+			) {
 			this.setState({ isLoad: true });
 			try {
+
+			
 				const images = await API.getData(nextQuery, page);
 				this.setState(state =>
 					state.items
@@ -81,6 +87,7 @@ class ImageGallery extends Component {
 
 	onClick = () => {
 		this.setState(state => ({ page: state.page + 1 }));
+		
 	};
 
 

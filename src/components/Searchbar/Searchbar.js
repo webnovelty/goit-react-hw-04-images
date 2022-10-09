@@ -1,5 +1,6 @@
 import { Formik } from 'formik';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 import { SearchForm, Input, Button, Span, Header } from './Searchbar.styled';
 let currentPage = 0;
 const Searchbar = ({ onSubmit }) => {
@@ -38,3 +39,7 @@ const Searchbar = ({ onSubmit }) => {
 }
 
 export default Searchbar;
+
+Searchbar.propTypes = {
+	onSubmit: PropTypes.func,
+};

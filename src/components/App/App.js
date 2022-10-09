@@ -18,7 +18,8 @@ class App extends Component {
 	};
 
 	onForm = async (name, page) => {
-		this.setState({ name: name, page: page});
+		this.setState({ name: name, page: page });
+		
 	
 	};
 
