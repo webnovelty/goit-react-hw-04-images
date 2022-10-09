@@ -4,7 +4,7 @@ import { Component } from 'react';
 import { toast } from 'react-toastify';
 import * as API from '../../services/api';
 import { Gallery } from './ImageGallery.styled';
-import { BallTriangle } from 'react-loader-spinner';
+import Loader from '../Loader';
 import PropTypes from 'prop-types';
 
 class ImageGallery extends Component {
@@ -102,15 +102,8 @@ class ImageGallery extends Component {
 		const { isLoad, items, page, showButton } = this.state;
 		return (
 			<div>
-				<BallTriangle
-					height={100}
-					width={100}
-					radius={5}
-					color="#4fa94d"
-					ariaLabel="ball-triangle-loading"
-					wrapperClass='loader'
-					wrapperStyle=""
-					visible={isLoad}
+				<Loader
+					isLoad={isLoad}
 				/>
 				{items && (
 					<Gallery>
