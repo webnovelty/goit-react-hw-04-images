@@ -1,22 +1,18 @@
 import { Img, Card } from './ImageGalleryItem.styled';
-const ImageGalleryItem = ({ webformatURL, tags }) => {
+
+
+
+const ImageGalleryItem = ({ webformatURL, tags, largeImageURL, onClickImage }) => {
 	return (
 		<Card>
-			<Img src={webformatURL} alt={tags} />
+			<Img
+				src={webformatURL}
+				alt={tags}
+				
+				onClick={() => onClickImage({ largeImageURL, tags })} />
 		</Card>
 	);
 
 };
 
 export default ImageGalleryItem;
-
-
-// return (
-// 	<ul>
-// 		{items.map(item => (
-// 			<ImageGallery key={id} webformatURL={item.webformatURL} largeImageURL={item.largeImageURL} />
-// 		))}
-// 	</ul>
-
-
-// );

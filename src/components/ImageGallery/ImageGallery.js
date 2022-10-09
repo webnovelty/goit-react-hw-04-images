@@ -1,69 +1,140 @@
+import Button from "components/Button";
 import ImageGalleryItem from "components/ImageGalleryItem";
+import { Component } from 'react';
+import { toast } from 'react-toastify';
+import * as API from '../../services/api';
 import { Gallery } from './ImageGallery.styled';
+import { BallTriangle } from 'react-loader-spinner';
+import PropTypes from 'prop-types';
+
+class ImageGallery extends Component {
+	state = {
+		items: [],
+		page: 1,
+		isLoad: false,
+		largeImageURL: '',
+		tags: '',
+		showButton: false,
+	};
+
+	async componentDidUpdate(prevProps, prevState) {
+
+		const { page, perPage } = this.state;
+
+		const prevQuery = prevProps.name;
+		const nextQuery = this.props.name;
+		const prevPage = prevState.page;
+		const currentPage = this.state.page;
+		const nextPage = this.props.page;
+
+		const options = {
+			position: 'top-right',
+			autoClose: 3000,
+		};
+
+		if (prevQuery !== nextQuery) {
+			this.setState({ items: [], page: 1 });
+		}
+
+		if (nextPage !== currentPage) {
+			this.setState({ page: this.props.page });
+		}
+
+		if (prevPage !== currentPage || prevQuery !== nextQuery) {
+			this.setState({ isLoad: true });
+			try {
+				const images = await API.getData(nextQuery, page);
+				this.setState(state =>
+					state.items
+						? {
+							items: [...state.items, ...images.hits],
+							showButton: true,
+						}
+						: { items: images.hits }
+				);
+				if (images.totalHits > 0 && prevQuery !== nextQuery) {
+					toast.success(
+						`Hooray! We found ${images.totalHits} images.`,
+						options
+					);
+					const lastPage = Math.ceil(images.totalHits / perPage);
+					if (page === lastPage && prevQuery !== nextQuery) {
+						toast.warn('Sorry, this is the last page...', options);
+						this.setState({ showButton: false });
+					}
+				} else if (prevQuery !== nextQuery) {
+					toast.warn(
+						'Oops, we did not find anything for your request!',
+						options
+					);
+				}
+			} catch {
+				toast.error(
+					'Oops, something went wrong. Repeat one more time!',
+					options
+				);
+			} finally {
+				this.setState({ isLoad: false });
+			}
+		}
+	}
+
+	onClick = () => {
+		this.setState(state => ({ page: state.page + 1 }));
+	};
 
 
-const ImageGallery = ({ items }) => {
-
-	return (
-		<Gallery>
-			
-			{items.map(item => (
-				
-				< ImageGalleryItem key={item.id} webformatURL={item.webformatURL} tags={item.tags } />	
-			))}
-			
-		</Gallery>
+	onClickImage = ({ largeImageURL, tags }) => {
+		this.setState({ largeImageURL, tags });
+		this.props.modalImage({ largeImageURL, tags });
+		this.props.toggleModal();
+	};
 
 
-);
+	render() {
+		const { isLoad, items, page, showButton } = this.state;
+		return (
+			<div>
+				<BallTriangle
+					height={100}
+					width={100}
+					radius={5}
+					color="#4fa94d"
+					ariaLabel="ball-triangle-loading"
+					wrapperClass='loader'
+					wrapperStyle=""
+					visible={isLoad}
+				/>
+				{items && (
+					<Gallery>
+						{items.map(({ id, webformatURL, tags, largeImageURL }) => (
+							<ImageGalleryItem
+								key={id}
+								webformatURL={webformatURL}
+								tags={tags}
+								largeImageURL={largeImageURL}
+								onClickImage={this.onClickImage}
+							/>
+						))}
+
+					</Gallery>
+				)}
+				{
+					showButton && (!items || items.length !== 0) && (
+						<Button page={page} onClickButton={this.onClick} />
+					)
+				}
+			</div>
+
+		);
+	}
 };
 export default ImageGallery;
 
 
-
-
-
-// const { items } = this.state;
-// console.log(items);
-// return (
-// 	<>
-// 		{items && (
-// 			<li>
-// 				{items.map(({ id, webformatURL, tags }) => (
-// 					<ImageGalleryItem
-// 						key={id}
-// 						webformatURL={webformatURL}
-// 						tags={tags}
-// 					/>
-// 				))}
-// 			</li>
-// 		)}
-// 	</>
-// );
-
-// state = {
-	// 	items: null,
-	// 	page: 1,
-	// 	perPage: 12,
-	// 	isLoading: false,
-	// 	largeImageURL: '',
-	// 	tags: '',
-	// 	showButton: false,
-	// };
-
-// 	async componentDidUpdate(prevProps, prevState) {
-// 		try {
-// const images = await API.getData();
-// 				this.setState(state =>
-// 					state.items
-// 						? {
-// 							items: [...state.items, ...images],
-// 						}
-// 						: { items: images }
-// 				);
-// 			} catch {
-// 				toast.error('Oops, something went wrong. Repeat one more time!');
-// 			} finally {
-// 				this.setState({ isLoading: false });
-// 			}
-// 	};
+ImageGallery.propTypes = {
+	page: PropTypes.number.isRequired,
+	name: PropTypes.string.isRequired,
+	toggleModal: PropTypes.func.isRequired,
+	modalImage: PropTypes.func.isRequired,
+};

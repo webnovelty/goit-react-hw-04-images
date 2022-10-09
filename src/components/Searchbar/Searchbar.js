@@ -1,15 +1,23 @@
 import { Formik } from 'formik';
+import { toast } from 'react-toastify';
 import { SearchForm, Input, Button, Span, Header } from './Searchbar.styled';
-
+let currentPage = 0;
 const Searchbar = ({ onSubmit }) => {
 	const handleSubmit = async (values, actions) => {
-		await onSubmit(values);
+		if (values.name.trim() === '') {
+			toast.error('Введите текст запроса!', { position: 'top-right' });
+			return;
+		}
+		currentPage = currentPage + 1;
+		await onSubmit(values.name, currentPage);
+		
 		actions.setSubmitting(false);
 		actions.resetForm();
+	
 	};
 	return (
 		<Header>
-			<Formik initialValues={{ name: '' }} onSubmit={handleSubmit}>
+			<Formik initialValues={{ name: ''}} onSubmit={handleSubmit}>
 				{({ isSubmitting }) => (
 					<SearchForm>
 						<Button type="submit" disabled={isSubmitting}>
