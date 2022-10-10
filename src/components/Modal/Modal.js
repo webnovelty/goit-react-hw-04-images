@@ -19,9 +19,16 @@ class Modal extends Component {
 		}
 	};
 
+	handleOverlayClick = ({ currentTarget, target }) => {
+		if (currentTarget.nodeName === target.nodeName) {
+			this.props.onClose();
+		}
+		
+	};
+
 	render() {
 		return createPortal(
-			<Overlay onClick={this.props.onClose}>
+			<Overlay onClick={this.handleOverlayClick}>
 				<ModalWrapper>
 					<img src={this.props.src} alt={this.props.alt} />
 				</ModalWrapper>

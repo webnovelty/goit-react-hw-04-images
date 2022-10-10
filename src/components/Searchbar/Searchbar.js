@@ -13,7 +13,7 @@ const Searchbar = ({ onSubmit }) => {
 		await onSubmit(values.name, currentPage);
 		
 		actions.setSubmitting(false);
-		actions.resetForm();
+		// actions.resetForm();
 	
 	};
 	return (
@@ -41,5 +41,5 @@ const Searchbar = ({ onSubmit }) => {
 export default Searchbar;
 
 Searchbar.propTypes = {
-	onSubmit: PropTypes.func,
+	onSubmit: PropTypes.func.isRequired,
 };

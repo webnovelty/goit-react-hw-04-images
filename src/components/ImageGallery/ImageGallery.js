@@ -15,26 +15,22 @@ class ImageGallery extends Component {
 		largeImageURL: '',
 		tags: '',
 		showButton: false,
+		total: 0,
 	};
 
 	async componentDidUpdate(prevProps, prevState) {
 
-		const { page, perPage } = this.state;
+		const { page} = this.state;
 
 		const prevQuery = prevProps.name;
 		const nextQuery = this.props.name;
 		const prevPage = prevState.page;
 		const currentPage = this.state.page;
-		// const nextPage = this.props.page;
 
 		const options = {
 			position: 'top-right',
 			autoClose: 3000,
 		};
-
-		// if (nextPage !== currentPage) {
-		// 	this.setState({ page: this.props.page });
-		// }
 
 		if (prevQuery !== nextQuery) {
 			this.setState({ items: [], page: 1 });
@@ -47,26 +43,27 @@ class ImageGallery extends Component {
 			this.setState({ isLoad: true });
 			try {
 
-
 				const images = await API.getData(nextQuery, page);
 				this.setState(state =>
 					state.items
 						? {
 							items: [...state.items, ...images.hits],
+							total: images.totalHits,
 							showButton: true,
+
 						}
-						: { items: images.hits }
+						: {
+							items: images.hits,
+							total: images.totalHits,
+
+						}
 				);
+				
 				if (images.totalHits > 0 && prevQuery !== nextQuery) {
 					toast.success(
 						`Hooray! We found ${images.totalHits} images.`,
 						options
 					);
-					const lastPage = Math.ceil(images.totalHits / perPage);
-					if (page === lastPage && prevQuery !== nextQuery) {
-						toast.warn('Sorry, this is the last page...', options);
-						this.setState({ showButton: false });
-					}
 				} else if (prevQuery !== nextQuery) {
 					toast.warn(
 						'Oops, we did not find anything for your request!',
@@ -98,7 +95,9 @@ class ImageGallery extends Component {
 
 
 	render() {
-		const { isLoad, items, page, showButton } = this.state;
+		const { isLoad, items, page, showButton, total } = this.state;
+		const checkTotal = page * 12 < total;
+		console.log(checkTotal);
 		return (
 			<div>
 				<Loader
@@ -118,10 +117,14 @@ class ImageGallery extends Component {
 
 					</Gallery>
 				)}
+
+	
 				{
-					showButton && (!items || items.length !== 0) && (
+					 
+					showButton && checkTotal && (!items || items.length !== 0) && (
 						<Button page={page} onClickButton={this.onClick} />
-					)
+						)
+					
 				}
 			</div>
 
