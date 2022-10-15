@@ -8,22 +8,16 @@ const modalRoot = document.querySelector('#modal-root');
 const Modal = ({ src, alt, onClose }) => {
 
 	useEffect(() => {
+		const keyDown = e => {
+			if (e.code === 'Escape') {
+				onClose();
+			}
+		};
 		window.addEventListener('keydown', keyDown);
 		return () => window.removeEventListener('keydown', keyDown)
-	}, []);
-
-	// React.useEffect(() => {
-	// 	console.log("MOUNT", props);
-
-	// 	return () => console.log("UNMOUNT", props)
-	// }, []);
+	}, [onClose]);
 
 
-	const keyDown = e => {
-		if (e.code === 'Escape') {
-			onClose();
-		}
-	};
 
 	const handleOverlayClick = ({ currentTarget, target }) => {
 		if (currentTarget.nodeName === target.nodeName) {
