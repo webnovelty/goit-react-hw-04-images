@@ -59,20 +59,6 @@ const ImageGallery = (props) => {
 		setPage(1);
 	}, [props.name]);
 
-	useEffect(() => {
-		if (total > 0) {
-			toast.success(
-				`Hooray! We found ${total} images.`,
-				options
-			);
-		}
-		else {
-			toast.warn(
-				'Oops, we did not find anything for your request!',
-				options
-			);
-		}
-	}, [props.name]);
 
 	const onClick = () => {
 		setPage(prevState => prevState + 1);
