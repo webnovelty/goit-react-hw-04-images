@@ -14,7 +14,6 @@ const ImageGallery = (props) => {
 	const [showButton, setShowButton] = useState(false);
 	const [total, setTotal] = useState(0);
 
-	
 
 	useEffect(() => {
 		const options = {
