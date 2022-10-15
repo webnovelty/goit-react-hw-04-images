@@ -21,14 +21,12 @@ const ImageGallery = (props) => {
 		autoClose: 3000,
 	};
 
-	
-
 	useEffect(() => {
 		async function fetchData() {
 			if (!props.name) {
 				return;
 			}
-		
+
 			setIsLoad(true);
 			try {
 
@@ -53,18 +51,31 @@ const ImageGallery = (props) => {
 			}
 		}
 		fetchData();
-		
+
 	}, [props.name, page]);
 
-	// useEffect(() => {
-	// 	console.log(props.name);
-	// 	setItems([]);
-	// 	setPage(1);
-	// }, [props.name]);
+	useEffect(() => {
+		setItems([]);
+		setPage(1);
+	}, [props.name]);
+
+	useEffect(() => {
+		if (total > 0) {
+			toast.success(
+				`Hooray! We found ${total} images.`,
+				options
+			);
+		}
+		else {
+			toast.warn(
+				'Oops, we did not find anything for your request!',
+				options
+			);
+		}
+	}, [props.name]);
 
 	const onClick = () => {
 		setPage(prevState => prevState + 1);
-		console.log(page);
 	};
 
 
@@ -96,13 +107,13 @@ const ImageGallery = (props) => {
 				</Gallery>
 			)}
 
-	
+
 			{
-					 
+
 				showButton && checkTotal && (!items || items.length !== 0) && (
 					<Button page={page} onClickButton={onClick} />
 				)
-					
+
 			}
 		</div>
 
