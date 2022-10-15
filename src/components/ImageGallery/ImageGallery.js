@@ -11,17 +11,16 @@ const ImageGallery = (props) => {
 	const [items, setItems] = useState(null);
 	const [page, setPage] = useState(1);
 	const [isLoad, setIsLoad] = useState(false);
-	const [largeImageURL, setLargeImageURL] = useState('');
-	const [tags, setTags] = useState('');
 	const [showButton, setShowButton] = useState(false);
 	const [total, setTotal] = useState(0);
 
-	const options = {
-		position: 'top-right',
-		autoClose: 3000,
-	};
+	
 
 	useEffect(() => {
+		const options = {
+			position: 'top-right',
+			autoClose: 3000,
+		};
 		async function fetchData() {
 			if (!props.name) {
 				return;
@@ -66,8 +65,6 @@ const ImageGallery = (props) => {
 
 
 	const onClickImage = ({ largeImageURL, tags }) => {
-		setLargeImageURL(largeImageURL);
-		setTags(tags);
 		props.modalImage({ largeImageURL, tags });
 		props.toggleModal();
 	};
