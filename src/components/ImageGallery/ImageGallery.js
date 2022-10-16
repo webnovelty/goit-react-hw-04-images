@@ -29,16 +29,11 @@ const ImageGallery = (props) => {
 			try {
 
 				const images = await API.getData(props.name, page);
-				// if (items) {
+
 					setItems(item => [...item, ...images.hits]);
 					setTotal(images.totalHits);
 					setShowButton(true);
-				// }
-				// else {
-				// 	setItems(images.hits);
-				// 	setTotal(images.totalHits);
-				// 	setShowButton(true);
-				// }
+				
 			} catch {
 				toast.error(
 					'Oops, something went wrong. Repeat one more time!',

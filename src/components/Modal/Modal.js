@@ -15,7 +15,7 @@ const Modal = ({ src, alt, onClose }) => {
 		};
 		window.addEventListener('keydown', keyDown);
 		return () => window.removeEventListener('keydown', keyDown)
-	});
+	}, [onClose]);
 
 
 
